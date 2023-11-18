@@ -1,0 +1,16 @@
+#eg-product-alert-modal {
+    z-index: 99999;
+    display: none;
+}
+
+#eg-product-alert-modal .form-group {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#eg-product-alert-modal .btn-success {
+    color: #fff;
+    background-color: #4cbb6c;
+    border-color: #4cbb6c;
+}

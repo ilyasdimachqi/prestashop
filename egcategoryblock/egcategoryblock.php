@@ -102,7 +102,7 @@ class EgCategoryBlock extends Module
 
     public function hookHeader()
     {
-
+	$this->context->controller->addCSS($this->_path . 'views/css/front.css');
     }
 
     public function hookDisplayHome($params)

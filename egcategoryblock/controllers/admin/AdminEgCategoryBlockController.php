@@ -37,11 +37,18 @@ class AdminEgCategoryBlockController extends ModuleAdminController
         $this->_defaultOrderWay = 'ASC';
         $this->list_no_link = true;
         $this->lang = true;
+        $this->multishop_context = Shop::CONTEXT_SHOP;
+        $this->action = '';
         $this->addRowAction('delete');
+        $this->addRowAction('edit');
         Shop::addTableAssociation($this->table, ['type' => 'shop']);
 
         parent::__construct();
 
+        if (is_null(Shop::getContextShopID())) {
+            $this->errors[] = $this->trans('Vous devez selectionner une boutique pour utiliser cet onglet.');
+            return;
+        }
         $this->bulk_actions = [
             'delete' => [
                 'text' => $this->trans('Delete selected'),
@@ -49,7 +56,6 @@ class AdminEgCategoryBlockController extends ModuleAdminController
                 'icon' => 'icon-trash'
             ]
         ];
-
         $this->fields_list = [
             'id_eg_category' => [
                 'title' => $this->trans('Id')
@@ -60,6 +66,7 @@ class AdminEgCategoryBlockController extends ModuleAdminController
                 'class' => 'fixed-width-xxl',
                 'filter_key' => 'b!title',
                 'search' => true,
+                'lang' => true,
             ],
             'subtitle' => [
                 'title' => $this->trans('subtitle'),
@@ -67,6 +74,7 @@ class AdminEgCategoryBlockController extends ModuleAdminController
                 'class' => 'fixed-width-xxl',
                 'filter_key' => 'b!subtitle',
                 'search' => false,
+                'lang' => true,
             ],
             'url' => [
                 'title' => $this->trans('URL'),
@@ -82,8 +90,8 @@ class AdminEgCategoryBlockController extends ModuleAdminController
                 'class' => 'fixed-width-xxl',
                 'search' => false,
             ],
-            'status' => [
-                'title' => $this->trans('ON'),
+            'active' => [
+                'title' => $this->trans('status'),
                 'align' => 'center',
                 'active' => 'status',
                 'class' => 'fixed-width-sm',
@@ -153,23 +161,29 @@ class AdminEgCategoryBlockController extends ModuleAdminController
                ['type' => 'text',
                     'label' => $this->trans('Title:'),
                     'name' => 'title',
-                    'desc' => $this->trans('Please enter a title .'),
                     'required' => true,
+                    'lang' => true,
                 ],
                 ['type' => 'textarea',
                     'label' => $this->trans('subtitle'),
                     'name' => 'subtitle',
+                    'lang' => true,
+                    'required' => true,
                 ],
                 ['type' => 'text',
                     'label' => $this->trans('URL'),
                     'name' => 'url',
                     'class' => 'fixed-width-xxl',
                     'search' => true,
+                    'required' => true,
                 ],
                 ['type' => 'file',
                     'label' => $this->trans('Image:'),
                     'name' => 'image',
                     'desc' => $this->trans('Download an image from your computer'),
+                    'required' => true,
+                    'callback' => 'showLogo',
+                    'callback_object' => 'EgCategoryBlockClass',
                 ],
                 ['type' => 'switch',
                     'label' => $this->trans('Display'),
@@ -204,9 +218,6 @@ class AdminEgCategoryBlockController extends ModuleAdminController
         return parent::renderForm();
     }
 
-    /**
-     * Update Positions testimonial
-     */
     public function ajaxProcessUpdatePositions()
     {
         $way = (int)(Tools::getValue('way'));
@@ -217,8 +228,8 @@ class AdminEgCategoryBlockController extends ModuleAdminController
             $pos = explode('_', $value);
 
             if (isset($pos[2]) && (int)$pos[2] === $idcategory){
-                if ($banner = new EgTestimonyClass((int)$pos[2])){
-                    if (isset($position) && $banner->updatePosition($way, $position)){
+                if ($category = new EgCategoryBlockClass((int)$pos[2])){
+                    if (isset($position) && $category->updatePosition($way, $position)){
                         echo 'ok position '.(int)$position.' for tab '.(int)$pos[1].'\r\n';
                     } else {
                         echo '{"hasError" : true, "errors" :

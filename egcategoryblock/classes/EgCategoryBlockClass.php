@@ -41,13 +41,12 @@ class EgCategoryBlockClass extends ObjectModel
         'multilang_shop' => true,
         'fields' => array(
             'id_category' => array('type' => self::TYPE_INT, 'validate' => 'isUnsignedInt'),
-            'image'        => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
-            'position'    => array('type' => self::TYPE_INT, 'validate' => 'isUnsignedInt'),
-            'active'      => array('type' => self::TYPE_BOOL),
-
             'title'        => array('type' => self::TYPE_STRING, 'lang' => true, 'validate' => 'isGenericName'),
             'subtitle'      => array('type' => self::TYPE_STRING, 'lang' => true, 'validate' => 'isGenericName'),
-            'url'   => array('type' => self::TYPE_STRING, 'lang' => true, 'validate' => 'isGenericName'),
+            'url'        => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
+            'image'        => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
+            'position' => array('type' => self::TYPE_INT, 'validate' => 'isUnsignedInt'),
+            'active'      => array('type' => self::TYPE_BOOL),
         ),
     );
 
@@ -70,11 +69,11 @@ class EgCategoryBlockClass extends ObjectModel
     public static function getCategories($maxDisplay = null)
     {
         $query = new DbQuery();
-        $query->select('t.*, tl.title, tl.subtitle, tl.url, tl.image');
+        $query->select('t.*, tl.title, tl.subtitle');
         $query->from('eg_category', 't');
         $query->leftJoin('eg_category_lang', 'tl', 't.id_eg_category = tl.id_eg_category AND
         tl.id_lang = ' . (int)Context::getContext()->language->id);
-        $query->where('t.status = "approuve"');
+        $query->where('t.active = 1');
         $query->orderBy('t.position ASC');
 
         if ($maxDisplay !== null) {
@@ -95,13 +94,11 @@ class EgCategoryBlockClass extends ObjectModel
         if (!$tabs) {
             return false;
         }
-
         foreach ($tabs as $tab) {
             if ((int)$tab['id_eg_category'] == (int)$this->id) {
                 $moved_tab = $tab;
             }
         }
-
         if (!isset($moved_tab) || !isset($position)) {
             return false;
         }
@@ -156,7 +153,6 @@ class EgCategoryBlockClass extends ObjectModel
 
     public function isCorrectImageFileExt($filename, $authorizedExtensions = null)
     {
-        // Filter on file extension
         if ($authorizedExtensions === null) {
             $authorizedExtensions = array('gif', 'jpg', 'jpeg', 'jpe', 'png', 'svg');
         }
@@ -176,5 +172,4 @@ class EgCategoryBlockClass extends ObjectModel
         $src = __PS_BASE_URI__. 'modules/egcategoryblock/views/img/'.$value;
         return $value ? '<img src="'.$src.'" width="80" height="40px" class="img img-thumbnail"/>' : '-';
     }
-
 }

@@ -23,31 +23,6 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-/**
- * 2007-2020 PrestaShop SA and Contributors
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License 3.0 (AFL-3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/AFL-3.0
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2020 PrestaShop SA and Contributors
- * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
- * International Registered Trademark & Property of PrestaShop SA
- */
-
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -56,7 +31,6 @@ include_once(dirname(__FILE__) . '/classes/EgCategoryBlockClass.php');
 
 class EgCategoryBlock extends Module
 {
-
     public function __construct()
     {
         $this->name = 'egcategoryblock';
@@ -102,13 +76,14 @@ class EgCategoryBlock extends Module
 
     public function hookHeader()
     {
-	$this->context->controller->addCSS($this->_path . 'views/css/front.css');
+        $this->context->controller->addCSS($this->_path . 'views/css/front.css');
+        $this->context->controller->addJS($this->_path . 'views/js/front.js');
+
     }
 
     public function hookDisplayHome($params)
     {
         $maxDisplay = Configuration::get('EG_CATEGORIES_MAX_DISPLAY');
-
         $categoriesList = EgCategoryBlockClass::getCategories($maxDisplay);
 
         foreach ($categoriesList as &$category) {
@@ -123,6 +98,11 @@ class EgCategoryBlock extends Module
         ));
 
         return $this->display(__FILE__, 'views/templates/hook/category_listing.tpl');
+    }
+
+    public function isUsingNewTranslationSystem()
+    {
+        return true;
     }
 
     public function getImageLink()
@@ -163,19 +143,19 @@ class EgCategoryBlock extends Module
         return array(
             'form' => array(
                 'legend' => array(
-                    'title' => $this->l('Module Configuration'),
+                    'title' => $this->trans('Module Configuration'),
                 ),
                 'input' => array(
                     array(
                         'type' => 'text',
-                        'label' => $this->l('Max CATEGORIES to Display'),
+                        'label' => $this->trans('Max CATEGORIES to Display'),
                         'name' => 'EG_CATEGORIES_MAX_DISPLAY',
                         'class' => 'fixed-width-xs',
-                        'desc' => $this->l('Enter the maximum number of CATEGORIES to display.'),
+                        'desc' => $this->trans('Enter the maximum number of CATEGORIES to display.'),
                     ),
                 ),
                 'submit' => array(
-                    'title' => $this->l('Save'),
+                    'title' => $this->trans('Save'),
                 ),
             ),
         );

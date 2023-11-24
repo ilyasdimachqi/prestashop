@@ -30,6 +30,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'eg_category` (
     `id_eg_category` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `id_category` int(10) unsigned NOT NULL,
     `image` varchar(255) NOT NULL,
+    `url` varchar(255) NOT NULL,
     `position` int(10) unsigned NOT NULL DEFAULT 0,
     `active` tinyint(1) unsigned NOT NULL DEFAULT 1,
     PRIMARY KEY (`id_eg_category`)
@@ -41,7 +42,6 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'eg_category_lang` (
     `id_shop` int(10) unsigned NOT NULL DEFAULT 1,
     `title` varchar(255) NOT NULL,
     `subtitle` varchar(255) NOT NULL,
-    `url` varchar(255) NOT NULL,
     PRIMARY KEY (`id_eg_category`, `id_shop`, `id_lang`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8 ;';
 
@@ -51,8 +51,6 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'eg_category_shop` (
     PRIMARY KEY (`id_eg_category`, `id_shop`),
     KEY `id_shop` (`id_shop`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8 ;';
-
-
 
 foreach ($sql as $query) {
     if (Db::getInstance()->execute($query) == false) {

@@ -1,4 +1,4 @@
-{**
+{*
  * 2007-2020 PrestaShop SA and Contributors
  *
  * NOTICE OF LICENSE
@@ -24,21 +24,30 @@
  *}
 
 {if $categoriesList}
-    <div id="custom-text">
-        <h2 class="slider-title">Categories List</h2>
-        <div class="slider">
-            {foreach $categoriesList as $categories}
-                    <div class="slider-item">
-                        <div class="card">
-                            <img class="card-img-top" src="{$categories.image}">
-                            <div class="card-body">
-                                <h5 class="card-title">{$categories.title}</h5>
+    <div class="category-container">
+        <div class="row">
+            <h2 class="col-12">{l s='NOS CATEGORIES' mod='EgCategoryBlock'}</h2>
+            {foreach $categoriesList as $category}
+                <div class="col-md-4">
+                    <div class="category-card">
+                        <a href="{$base_url}{$category.url}">
+                            <img class="img-fluid" src="{$category.image}" alt="Category Image">
+                            <div>
+                                <h5 class="card-title">{$category.title}</h5>
                             </div>
-                        </div>
+                        </a>
                     </div>
+                </div>
             {/foreach}
         </div>
     </div>
 {else}
-    <h2 class="slider-title">No testimonials available.</h2>
+    <div class="category-container">
+        <div class="row">
+            <h2 class="text-center">No categories available.</h2>
+        </div>
+    </div>
 {/if}
+
+
+

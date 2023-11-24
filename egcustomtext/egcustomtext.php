@@ -35,7 +35,7 @@ class EgCustomText extends Module
         $this->name = 'egcustomtext';
         $this->tab = 'front_office_features';
         $this->version = '1.0.0';
-        $this->author = 'Your Name';
+        $this->author = 'Egio Digital';
         $this->need_instance = 0;
         $this->bootstrap =true;
 
@@ -91,18 +91,6 @@ class EgCustomText extends Module
             return $this->display(__FILE__, 'views/templates/hook/egcustomtext.tpl');
         }
         return '';
-    }
-
-    public function getTabs()
-    {
-        return [
-            [
-                'class_name' => 'AdminTextBlock',
-                'visible' => true,
-                'name' => 'Manage Eg Custom text ',
-                'parent_class_name' => 'MANAGE',
-            ]
-        ];
     }
 
     public function getContent()

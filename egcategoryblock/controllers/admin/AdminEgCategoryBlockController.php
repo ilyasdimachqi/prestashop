@@ -117,10 +117,6 @@ class AdminEgCategoryBlockController extends ModuleAdminController
 
     }
 
-    public function initPageHeaderToolbar()
-    {
-        parent::initPageHeaderToolbar();
-    }
 
     public function postProcess()
     {
@@ -146,7 +142,6 @@ class AdminEgCategoryBlockController extends ModuleAdminController
             'uri' => $this->module->getPathUri()
         ]);
         parent::initProcess();
-
     }
 
     public function renderForm()

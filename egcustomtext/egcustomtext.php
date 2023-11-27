@@ -50,7 +50,6 @@ class EgCustomText extends Module
     public function install()
     {
         if (!parent::install() ||
-            !$this->registerHook('header') ||
             !$this->registerHook('displayHome') ||
             !Configuration::updateValue('EG_CUSTOM_TEXT_ACTIVE', 1) ||
             !Configuration::updateValue('EG_CUSTOM_TEXT_TITLE', 'Default Title') ||
@@ -85,8 +84,8 @@ class EgCustomText extends Module
         $description = Configuration::get('EG_CUSTOM_TEXT_DESCRIPTION',$this->context->language->id);
         if ($active) {
             $this->context->smarty->assign([
-                'EG_CUSTOM_TEXT_TITLE' => $title,
-                'EG_CUSTOM_TEXT_DESCRIPTION' => $description,
+                'title' => $title,
+                'description' => $description,
             ]);
             return $this->display(__FILE__, 'views/templates/hook/egcustomtext.tpl');
         }
@@ -104,8 +103,7 @@ class EgCustomText extends Module
             $languages = Language::getLanguages(false);
 
             foreach ($languages as $lang) {
-                $title[$lang['id_lang']] = Tools::getValue('EG_CUSTOM_TEXT_TITLE_'
-                    . $lang['id_lang']);
+                $title[$lang['id_lang']] = Tools::getValue('EG_CUSTOM_TEXT_TITLE_' . $lang['id_lang']);
                 $description[$lang['id_lang']] = Tools::getValue('EG_CUSTOM_TEXT_DESCRIPTION_'
                     . $lang['id_lang']);
             }

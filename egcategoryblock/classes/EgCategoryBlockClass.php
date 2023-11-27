@@ -41,12 +41,12 @@ class EgCategoryBlockClass extends ObjectModel
         'multilang_shop' => true,
         'fields' => array(
             'id_category' => array('type' => self::TYPE_INT, 'validate' => 'isUnsignedInt'),
-            'title'        => array('type' => self::TYPE_STRING, 'lang' => true, 'validate' => 'isGenericName'),
-            'subtitle'      => array('type' => self::TYPE_STRING, 'lang' => true, 'validate' => 'isGenericName'),
             'url'        => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
             'image'        => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
             'position' => array('type' => self::TYPE_INT, 'validate' => 'isUnsignedInt'),
             'active'      => array('type' => self::TYPE_BOOL),
+            'title'        => array('type' => self::TYPE_STRING, 'lang' => true, 'validate' => 'isGenericName'),
+            'subtitle'      => array('type' => self::TYPE_STRING, 'lang' => true, 'validate' => 'isGenericName'),
         ),
     );
 
@@ -172,4 +172,76 @@ class EgCategoryBlockClass extends ObjectModel
         $src = __PS_BASE_URI__. 'modules/egcategoryblock/views/img/'.$value;
         return $value ? '<img src="'.$src.'" width="80" height="40px" class="img img-thumbnail"/>' : '-';
     }
+
+    public static function createTabs()
+    {
+        $idParent = (int)Tab::getIdFromClassName('AdminEgDigital');
+        if (empty($idParent)) {
+            $parent_tab = new Tab();
+            $parent_tab->class_name = 'AdminEgDigital';
+            $parent_tab->module = 'egcategoryblock';
+            $parent_tab->icon = 'library_books';
+            foreach (Language::getLanguages(true) as $lang) {
+                $parent_tab->name[$lang['id_lang']] =Translate::getModuleTranslation(
+                    'egcategoryblock',
+                    'Modules EGIO',
+                    'Modules.Egcategoryblock'
+                );
+            }
+            $parent_tab->id_parent = 0;
+            $parent_tab->add();
+        }
+
+        $tab = new Tab();
+        $tab->class_name = 'AdminEgCategoryGeneral';
+        $tab->module = 'egcategoryblock';
+        $tab->icon = 'library_books';
+        foreach (Language::getLanguages(true) as $lang) {
+            $tab->name[$lang['id_lang']] = Translate::getModuleTranslation(
+                'egcategoryblock',
+                'Category management',
+                'Modules.Egcategoryblock.Egcategoryblock');
+        }
+        $tab->id_parent = (int)Tab::getIdFromClassName('AdminEgDigital');
+        $tab->add();
+
+        $tab = new Tab();
+        $tab->class_name = 'AdminEgCategoryBlock';
+        $tab->module = 'egcategoryblock';
+        $tab->icon = 'library_books';
+        foreach (Language::getLanguages(true) as $lang) {
+            $tab->name[$lang['id_lang']] = Translate::getModuleTranslation(
+                'egcategoryblock',
+                'Category management',
+                'Modules.Egcategoryblock'
+            );
+        }
+        $tab->id_parent = (int)Tab::getIdFromClassName('AdminEgCategoryGeneral');
+        $tab->add();
+
+        $tab = new Tab();
+        $tab->class_name = 'AdminEgCategoryBlockConf';
+        $tab->module = 'egcategoryblock';
+        foreach (Language::getLanguages(true) as $lang) {
+            $tab->name[$lang['id_lang']] = Translate::getModuleTranslation(
+                'egcategoryblock',
+                'Category Management Configuration',
+                'Modules.Egcategoryblock'
+            );
+        }
+        $tab->id_parent = (int)Tab::getIdFromClassName('AdminEgCategoryGeneral');
+        $tab->add();
+
+        return true;
+    }
+    public  static function removeTabs($class_name)
+    {
+        if ($tab_id = (int)Tab::getIdFromClassName($class_name)) {
+            $tab = new Tab($tab_id);
+            $tab->delete();
+        }
+        return true;
+    }
+
+
 }

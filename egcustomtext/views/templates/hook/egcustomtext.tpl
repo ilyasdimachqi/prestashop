@@ -1,4 +1,4 @@
-{**
+{*
  * 2007-2020 PrestaShop SA and Contributors
  *
  * NOTICE OF LICENSE
@@ -24,7 +24,7 @@
  *}
 
 <div id="custom-text">
-    <h2>{l s='Eg Custom Text Block' mod='EgCustomText'}</h2>
-    <p><strong class="dark">{$EG_CUSTOM_TEXT_TITLE}</strong></p>
-    <p>{$EG_CUSTOM_TEXT_DESCRIPTION}</p>
+    <h2>{l s='Eg Custom Text Block' mod='Egcustomtext'}</h2>
+    <p ><strong class="dark">{$title|escape:'htmlall':'UTF-8'}</strong></p>
+    <p>{$description|escape:'htmlall':'UTF-8'}</p>
 </div>

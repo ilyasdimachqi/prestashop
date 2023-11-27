@@ -26,14 +26,14 @@
 {if $categoriesList}
     <div class="category-container">
         <div class="row">
-            <h2 class="col-12">{l s='NOS CATEGORIES' mod='EgCategoryBlock'}</h2>
+            <h2 class="col-12">{l s='NOS CATEGORIES' mod='egcategoryblock'}</h2>
             {foreach $categoriesList as $category}
                 <div class="col-md-4">
                     <div class="category-card">
-                        <a href="{$base_url}{$category.url}">
-                            <img class="img-fluid" src="{$category.image}" alt="Category Image">
+                        <a href="{$base_url|escape:'htmlall':'UTF-8'}{$category.url|escape:'htmlall':'UTF-8'}">
+                            <img class="img-fluid" src="{$category.image|escape:'htmlall':'UTF-8'}" alt="Category Image">
                             <div>
-                                <h5 class="card-title">{$category.title}</h5>
+                                <h5 class="card-title">{$category.title|escape:'htmlall':'UTF-8'}</h5>
                             </div>
                         </a>
                     </div>
@@ -44,7 +44,7 @@
 {else}
     <div class="category-container">
         <div class="row">
-            <h2 class="text-center">No categories available.</h2>
+            <h2 class="text-center">{l s='No categories available.' mod='egcategoryblock'}</h2>
         </div>
     </div>
 {/if}

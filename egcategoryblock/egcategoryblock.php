@@ -47,7 +47,6 @@ class EgCategoryBlock extends Module
         $this->description = $this->l('Adds a category block to the home page.');
         $this->confirmUninstall = $this->trans('Are you sure you want to uninstall?', [], $this->domain);
         $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
-
     }
 
     public function install()
@@ -60,6 +59,7 @@ class EgCategoryBlock extends Module
         ) {
             return false;
         }
+        EgCategoryBlockClass::createTabs();
         return true;
     }
 
@@ -68,6 +68,9 @@ class EgCategoryBlock extends Module
         include(dirname(__FILE__) . '/sql/uninstall.php');
 
         if (!parent::uninstall()) {
+            EgCategoryBlockClass::removeTabs('AdminEgCategoryGeneral');
+            EgCategoryBlockClass::removeTabs('AdminEgCategoryBlock');
+            EgCategoryBlockClass::removeTabs('AdminEgCategoryBlockConf');
             return false;
         }
 
@@ -103,11 +106,6 @@ class EgCategoryBlock extends Module
     public function isUsingNewTranslationSystem()
     {
         return true;
-    }
-
-    public function getImageLink()
-    {
-        return _MODULE_DIR_ . $this->name . '/views/img/';
     }
 
     public function getContent()
